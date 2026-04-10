@@ -16,6 +16,9 @@ const Tarefa = sequelize.define(
     finalizado: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
+    },
+    arquivo: {
+      type: DataTypes.STRING
     }
   },
   {

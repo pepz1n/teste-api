@@ -1,4 +1,5 @@
 import Tarefa from "../models/TarefaModel.js";
+import fileUpload from "../utils/fileUpload.js";
 
 const get = async (req, res) => {
   try {
@@ -15,6 +16,7 @@ const get = async (req, res) => {
           id
         }
       });
+      dados.arquivo = `${process.env.API_HOST}${dados.arquivo}`
     }
     
     return res.status(200).send({
@@ -52,6 +54,19 @@ const create = async (req, res) => {
       descricao,
       finalizado
     });
+
+    if (req.files && req.files.uploadFile) {
+      let upload = await fileUpload(req.files.uploadFile, {
+        id: retorno.id,
+        tipo: req.query.tipo || 'imagem',
+        tabela: 'tarefa'
+      });
+
+      retorno.arquivo = upload.path;
+      await retorno.save();
+    }
+
+    
 
     return res.status(201).send({
       type: 'success',
