@@ -1,6 +1,7 @@
 import Usuario from "../models/UsuarioModel.js";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
+import enviarEmail from "../utils/sendMail.js";
 
 const register = async (req, res) => {
   try {
@@ -127,9 +128,25 @@ const getUserByToken = (req, res) => {
   }
 }
 
+const sendMail = async (req, res) => {
+  try {
+    const oi = await enviarEmail('emailcrs', 'bebezanetti@gmail.com', 'teste', '<h1>teste</h1>')
+    res.status(200).send({
+      type: 'foi',
+    });
+  } catch (error) {
+    res.status(500).send({
+      type: 'error',
+      message: 'Ops! ocorreu um erro',
+      data: error.message,
+    });
+  }
+}
+
 
 export default {
   register,
   login,
-  getUserByToken
+  getUserByToken,
+  sendMail
 }
